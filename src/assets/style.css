@@ -1,0 +1,12 @@
+body{
+    margin-top: 10px;
+}
+
+.mouseBtn{
+    position: relative;
+    margin: 10 2.5% 10 2.5%;
+    float: left;
+    width:45%;
+    height: 200px;
+    background-color: #CCC;
+}

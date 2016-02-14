@@ -1,12 +1,23 @@
 body{
     margin-top: 10px;
+    font-family: sans-serif;
 }
 
 .mouseBtn{
+    text-align: center;
     position: relative;
     margin: 10 2.5% 10 2.5%;
     float: left;
     width:45%;
     height: 200px;
     background-color: #CCC;
+}
+
+.normalBtn{
+     float: left;
+     clear: left;
+     width:95%;
+     height:25px;
+     color: #fff;
+     background-color: #4d4d4d;
 }

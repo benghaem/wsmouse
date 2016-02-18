@@ -19,6 +19,8 @@ const unsigned int W_KEY = 25;
 const unsigned int A_KEY = 38;
 const unsigned int S_KEY = 39;
 const unsigned int D_KEY = 40;
+const unsigned int SHIFT_KEY = 50;
+const char SHIFT_CHAR = '%';
 
 typedef websocketpp::server<websocketpp::config::asio> server;
 
@@ -84,7 +86,8 @@ void on_message(Display *disp, server *s, bool *acc_on, std::map<char,bool>* key
             else if (sensor_val > 1){
                 diff_keypress(disp,keys_pressed,'a',false,A_KEY);
                 diff_keypress(disp,keys_pressed,'d',true,D_KEY);
-            } else{
+            }
+            else{
                 diff_keypress(disp,keys_pressed,'a',false,A_KEY);
                 diff_keypress(disp,keys_pressed,'d',false,D_KEY);
             }

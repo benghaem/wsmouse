@@ -21,3 +21,8 @@ body{
      color: #fff;
      background-color: #4d4d4d;
 }
+
+.mouseBtnDown{
+     background-color:#4d4d4d;
+     color: #fff;
+}

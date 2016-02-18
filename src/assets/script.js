@@ -1,7 +1,7 @@
 var ws = new WebSocket("ws:10.0.1.150:9000")
-var old_pos = [0,0,0]
-var prev_acc = [0,0,0]
-var prev_vel = [0,0,0]
+var old_pos = [0,0,0,0,0,0]
+var prev_acc = [0,0,0,0,0,0]
+var prev_vel = [0,0,0,0,0,0]
 var last_tick = Date.now()
 var current_tick = Date.now()
 var calibrate = false
@@ -12,11 +12,60 @@ var x_cursor_index = 5
 var y_cursor_index = 3
 var cal_arr = [[],[],[],[],[],[]]
 var cal_cycles = 0
+var send_raw = false;
+var grip_down = false;
+var grip_as_toggle = true;
 
-function push(val, delta, index){
+
+function toggle_grip(){
+    if (grip_down){
+        grip_down = false;
+        //send_up_down(9,false)
+    } else {
+        grip_down = true;
+        //send_up_down(9, true)
+    }
+}
+
+function toggle_raw(){
+    send_raw = (!send_raw)
+    send_sensor(0,0)
+    send_sensor(1,0)
+    send_sensor(2,0)
+    send_sensor(3,0)
+    send_sensor(4,0)
+    send_sensor(5,0)
+}
+
+function send_sensor(id,value){
+    prefix = ""
+
+    if (id < 10){
+        prefix = "0"
+    }
+    ws.send(prefix+id+value)
+}
+
+function send_up_down(id, down){
+    prefix = ""
+    if (id < 10){
+        prefix = "0"
+    }
+    state = ""
+    if (down){
+        state = "d"
+    }
+    else{
+        state = "u"
+    }
+    ws.send(prefix+id+state);
+}
+
+
+function calc_send_pos(val, delta, index, id){
     var new_vel = ((delta*((val + prev_acc[index])/2)) + prev_vel[index]) / 10
     var new_pos = ((delta) * ((new_vel + prev_vel[index]) / 2) + old_pos[index])
-    ws.send(index + " " + (new_pos - old_pos[index]))
+    send_sensor(id, (new_pos - old_pos[index]))
     old_pos[index] = new_pos
     prev_vel[index] = new_vel
 }
@@ -64,12 +113,21 @@ window.addEventListener('devicemotion',function(event){
             }
         }
 
-        cursor_x = sensor_arr[x_cursor_index] * -0.15
-        cursor_y = sensor_arr[y_cursor_index] * -0.05
+        if (send_raw){
+            send_sensor(0,sensor_arr[0])
+            send_sensor(1,sensor_arr[1])
+            send_sensor(2,sensor_arr[2])
+            send_sensor(3,sensor_arr[3])
+            send_sensor(4,sensor_arr[4])
+            send_sensor(5,sensor_arr[5])
+        }
+        if (!grip_down){
+            cursor_x = sensor_arr[x_cursor_index] * -0.15
+            cursor_y = sensor_arr[y_cursor_index] * -0.05
 
-        push(cursor_x, current_tick - last_tick, 0)
-        push(cursor_y, current_tick - last_tick, 1)
-
+            calc_send_pos(cursor_x, current_tick - last_tick, 0, 10)
+            calc_send_pos(cursor_y, current_tick - last_tick, 1, 11)
+        }
     } else {
         if (cal_cycles < 1000){
             for(i=sensor_arr.length-1; i>=0; i--){
@@ -104,23 +162,34 @@ window.addEventListener('devicemotion',function(event){
 
 $(function(){
     $("#lmb").on("pointerdown",function() {
-        ws.send("6d")
+        send_up_down(6,true)
+        if("vibrate" in window.navigator) {
+            window.navigator.vibrate(100);
+        }
     })
     $("#lmb").on("pointerup",function() {
-        ws.send("6u")
+        send_up_down(6,false)
     })
 
     $("#rmb").on("pointerdown",function() {
-        ws.send("7d")
+        send_up_down(7,true)
     })
     $("#rmb").on("pointerup", function() {
-        ws.send("7u")
+        send_up_down(7,false)
     })
     $("#release").on("pointerdown",function() {
-        ws.send("9d")
+        toggle_grip()
+        $("#release").toggleClass("mouseBtnDown")
     })
     $("#release").on("pointerup", function() {
-        ws.send("9u")
+        if (!grip_as_toggle){
+            toggle_grip()
+            $("#release").toggleClass("mouseBtnDown")
+        }
+    })
+    $("#move").on("pointerdown", function(){
+         toggle_raw();
+         $("#move").toggleClass("mouseBtnDown")
     })
 
     $("#cali").on("pointerdown",function(){

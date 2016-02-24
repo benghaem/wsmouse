@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws:10.0.1.150:9000")
+var ws = new WebSocket("ws:172.25.203.234:9000")
 var old_pos = [0,0,0,0,0,0]
 var prev_acc = [0,0,0,0,0,0]
 var prev_vel = [0,0,0,0,0,0]
@@ -177,14 +177,15 @@ $(function(){
     $("#rmb").on("pointerup", function() {
         send_up_down(7,false)
     })
-    $("#release").on("pointerdown",function() {
+    $("#grip").on("pointerdown",function() {
         toggle_grip()
-        $("#release").toggleClass("mouseBtnDown")
+
+        $("#grip").toggleClass("mouseBtnDown")
     })
-    $("#release").on("pointerup", function() {
+    $("#grip").on("pointerup", function() {
         if (!grip_as_toggle){
             toggle_grip()
-            $("#release").toggleClass("mouseBtnDown")
+            $("#grip").toggleClass("mouseBtnDown")
         }
     })
     $("#move").on("pointerdown", function(){

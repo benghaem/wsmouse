@@ -1,5 +1,5 @@
 ## WS Mouse
-----
+
 
 Control your mouse using your phone's accelerometers and web browser.
 
@@ -13,14 +13,18 @@ Run make from the root directory:
 First change the LOCAL_IP variable in the javascript file located at:
 `src/assets/script.js` to the ip of your computer on the network
 
+The line you want to change looks like this:
+
+`var LOCAL_IP = "192.168.1.16"`
+
 Next host the source files:
 (Python works well here in a pinch)
 
-`
-cd src/assets/
-python -m http.server 8080
-`
+`cd src/assets/`
+
+`python -m http.server 8080`
 
 Then run the wsmouse executable that you built in bin
+
 `./bin/wsmouse`
 

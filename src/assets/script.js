@@ -1,4 +1,9 @@
-var ws = new WebSocket("ws:172.25.203.234:9000")
+//CHANGE THIS
+var LOCAL_IP = "192.168.1.16"
+
+alert("Local IP set to: " + LOCAL_IP)
+
+var ws = new WebSocket("ws:"+LOCAL_IP+":9000")
 var old_pos = [0,0,0,0,0,0]
 var prev_acc = [0,0,0,0,0,0]
 var prev_vel = [0,0,0,0,0,0]

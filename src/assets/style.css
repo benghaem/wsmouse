@@ -1,4 +1,5 @@
 body{
+    margin: 0 0 0 0;
     margin-top: 10px;
     font-family: sans-serif;
 }
@@ -6,23 +7,26 @@ body{
 .mouseBtn{
     text-align: center;
     position: relative;
-    margin: 10 2.5% 10 2.5%;
+    margin: 2.5% 2.5% 2.5% 2.5%;
     float: left;
     width:45%;
-    height: 200px;
+    height: 40%;
     background-color: #CCC;
 }
 
 .normalBtn{
-     float: left;
-     clear: left;
-     width:95%;
-     height:25px;
-     color: #fff;
-     background-color: #4d4d4d;
+    margin: 0 2.5px 0 2.5px;
+    position: relative;
+    float: left;
+    clear: left;
+    width:100%;
+    height:2%;
+    min-height:25px;
+    color: #fff;
+    background-color: #4d4d4d;
 }
 
 .mouseBtnDown{
-     background-color:#4d4d4d;
-     color: #fff;
+    background-color:#4d4d4d;
+    color: #fff;
 }
